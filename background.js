@@ -42,7 +42,7 @@ function off_topic(focus_topic, current_topic, current_time){
     fetchCosSimilarity(focus_topic, current_topic).then(cos_sim => {
         //console.log(cos_sim);
         if (cos_sim < 0.54){
-            if (current_time-begin > 5000){
+            if (current_time-begin > 0){
                 //alert("You are off topic");
                 alert("You are off topic" + cos_sim);
             }
