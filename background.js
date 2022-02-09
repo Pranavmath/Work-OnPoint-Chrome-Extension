@@ -53,10 +53,13 @@ function off_topic(focus_topic, current_topic, current_time){
 }
 
 function check(url, focus_topic, current_time) {
+    /*
     get_title(url).then(title => {
         var current_topic = title;
         off_topic(focus_topic, current_topic, current_time);
     });
+    */
+    alert("Check called");
 }
 
 chrome.runtime.onMessage.addListener(run); // listening for popup.js to message to start focus session
@@ -65,9 +68,8 @@ function run(message, sender, sendResponse) {
     focus_topic = message.txt;
     begin = Date.now();
     var continue_loop = true;
-    //chrome.runtime.onMessage.addListener(run); // listening for popup.js to message to stop focus session
 
-    function break_session() {
+    function break_session(message, sender, sendResponse) {
         continue_loop = false;
     }
     function repeat() {
@@ -78,11 +80,12 @@ function run(message, sender, sendResponse) {
 
             check(url, focus_topic, current_time);
         });
-        sleep(5000).then(() => {
-            repeat();
-        });
+
+        if (continue_loop) {
+            sleep(5000).then(() => {
+                repeat();
+            });
+        }
     }
-    if (continue_loop) {
-        repeat();
-    }
+    repeat();
 }

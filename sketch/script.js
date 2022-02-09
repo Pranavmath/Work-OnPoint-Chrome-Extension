@@ -7,4 +7,13 @@ function url(){
         txt: x
     };
     chrome.runtime.sendMessage(msg);
+    document.getElementById("end").addEventListener("click", end);
+}
+
+function end(){
+    let msg = {
+        txt: "end focus session"
+    };
+    chrome.runtime.sendMessage(msg);
+    alert("end ran");
 }
