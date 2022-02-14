@@ -1,4 +1,5 @@
 document.getElementById("submit").addEventListener("click", url);
+var background = chrome.extension.getBackgroundPage(); //do this in global scope for popup.js
 
 function url(){
     var x = document.getElementById("url").value;
@@ -11,9 +12,5 @@ function url(){
 }
 
 function end(){
-    let msg = {
-        txt: "end focus session"
-    };
-    chrome.runtime.sendMessage(msg);
-    alert("end ran");
+    background.continue_loop = false;
 }

@@ -1,5 +1,6 @@
 console.log('Chrome extension go!');
 var begin = 0;
+var continue_loop = true;
 
 function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
@@ -67,11 +68,7 @@ chrome.runtime.onMessage.addListener(run); // listening for popup.js to message 
 function run(message, sender, sendResponse) {
     focus_topic = message.txt;
     begin = Date.now();
-    var continue_loop = true;
 
-    function break_session(message, sender, sendResponse) {
-        continue_loop = false;
-    }
     function repeat() {
         // I believe that currentWindow is better than lastFocusedWindow
         chrome.tabs.query({active: true, currentWindow: true}, tabs => {
@@ -81,11 +78,11 @@ function run(message, sender, sendResponse) {
             check(url, focus_topic, current_time);
         });
 
-        if (continue_loop) {
-            sleep(5000).then(() => {
+        sleep(5000).then(() => {
+            if (continue_loop){
                 repeat();
-            });
-        }
+            }
+        });
     }
     repeat();
 }
