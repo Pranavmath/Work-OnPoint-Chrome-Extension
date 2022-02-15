@@ -2,6 +2,7 @@ document.getElementById("submit").addEventListener("click", url);
 var background = chrome.extension.getBackgroundPage(); //do this in global scope for popup.js
 
 function url(){
+    background.continue_loop = true;
     var x = document.getElementById("url").value;
     console.log(x);
     let msg = {
@@ -13,4 +14,5 @@ function url(){
 
 function end(){
     background.continue_loop = false;
+    alert(background.continue_loop);
 }
