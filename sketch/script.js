@@ -9,10 +9,10 @@ function url(){
         txt: x
     };
     chrome.runtime.sendMessage(msg);
-    document.getElementById("end").addEventListener("click", end);
 }
+
+document.getElementById("end").addEventListener("click", end);
 
 function end(){
     background.continue_loop = false;
-    alert(background.continue_loop);
 }

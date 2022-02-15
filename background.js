@@ -60,8 +60,8 @@ function check(url, focus_topic, current_time) {
         off_topic(focus_topic, current_topic, current_time);
     });
     */
-    //chrome.tabs.executeScript({file: "/content.js"});
-    alert("aaasdasd");
+    chrome.tabs.executeScript({file: "/content.js"});
+    //alert("aaasdasd");
 }
 
 chrome.runtime.onMessage.addListener(run); // listening for popup.js to message to start focus session
