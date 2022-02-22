@@ -1,5 +1,6 @@
-document.getElementById("submit").addEventListener("click", url);
 var background = chrome.extension.getBackgroundPage(); //do this in global scope for popup.js
+
+document.getElementById("submit").addEventListener("click", url);
 
 function url(){
     background.continue_loop = true;

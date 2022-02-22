@@ -60,8 +60,20 @@ function check(url, focus_topic, current_time) {
         off_topic(focus_topic, current_topic, current_time);
     });
     */
-    chrome.tabs.executeScript({file: "/content.js"});
-    //alert("dasdsd");
+    chrome.idle.queryState(
+      15,
+      function(state) {
+        if (state ==  "active") {
+            chrome.tabs.executeScript({code: "var type_alert = 'alert';"}, function() {
+                chrome.tabs.executeScript({file: '/content.js'});
+            });
+        } else {
+            chrome.tabs.executeScript({code: "var type_alert = 'snooze';"}, function() {
+                chrome.tabs.executeScript({file: '/content.js'});
+            });
+        }
+      }
+    );
 }
 
 chrome.runtime.onMessage.addListener(run); // listening for popup.js to message to start focus session
