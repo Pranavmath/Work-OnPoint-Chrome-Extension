@@ -2,21 +2,38 @@
 <html>
   <div id="poppingup" style = "min-width:600px;"></div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
   <style>
-  p {font-family: 'Nunito';font-size: 15px;}
+  p {font-family: 'Nunito';font-size: 15px;margin-left: 20px;}
   body {font-family: 'Nunito';font-size: 20px;}
   </style>
 
   <body>
+  <h1 style="text-align: center;">Statistics</h1>
 
-  <a href="index.html" class="btn btn-primary" role="button">Focus Session</a>
+  <p><img src="coin.png" style="width:20px;height:20px;"> Number of Coins: <a1 id="coin">1</a></p>
 
-  <br><br>
+  <canvas id="graph" style="width:100%;max-width:600px"></canvas>
 
-  <br><br><br><br><br>
+  <br>
+
+  <p>Click this button to refresh: <button id="refresh" class="btn btn-primary"><i class="fa fa-refresh"></i></button></p>
+
+  <script src="leaderboard.js"></script>
+
+  <nav aria-label="Page navigation example">
+    <br>
+    <ul class="pagination pagination-sm justify-content-center">
+      <li class="page-item"><a class="page-link" href="index.html">Previous</a></li>
+      <li class="page-item"><a class="page-link" href="index.html">1</a></li>
+      <li class="page-item active"><a class="page-link" href="#">2</a></li>
+      <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+    </ul>
+  </nav>
 
   </body>
 </html>
