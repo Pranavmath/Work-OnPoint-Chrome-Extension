@@ -2,6 +2,15 @@ console.log('Chrome extension go!');
 var begin = 0;
 var continue_loop = true;
 
+function statistics () {
+    let data = {
+        "week": [2, 3, 4, 5, 6, 8, 10],
+        "coin": 9,
+        "rank": ["Hi", "Yo", "Joe"]
+    }
+    return data;
+}
+
 function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
