@@ -12,27 +12,55 @@
 
   <nav class="navbar navbar-dark bg-primary">
     <!-- Navbar content -->
-    <a class="navbar-brand" style="color:white;" href="#">Home</a>
-    <a class="navbar-brand" style="color:white;" href="leaderboard.html">Login</a>
-  </nav>  
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <a class="navbar-brand" style="color:white;" href="index.html">Home</a>
+        </div>
+        <div class="col">
+          <a class="navbar-brand" style="color:white;" href="login.html">Login</a>
+        </div>
+        <div class="col">
+          <a class="navbar-brand" style="color:white;" href="signup.html">Sign Up</a>
+        </div>
+      </div>
+    </div>
+  </nav>
 
+
+  <h1 style="text-align:center;">Login</h1>
 
   <body>
 
-  Enter URL: <input type="text" id="url" size=35 style="height:20px;font-size:10pt;">
+  <p>Please Login in to view the Statistics and Leaderboard</p>
+
+  <form method="POST">
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        name="email"
+        placeholder="Enter email"
+      />
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        placeholder="Enter password"
+      />
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+  </form>
+
   <br>
-  <button id="submit" class="btn btn-primary" style="height:30px;font-size:10pt;text-align:center;">Start Focus Session</button>
 
-  <button id="end" class="btn btn-primary" style="height:30px;font-size:10pt;text-align:center;">End Focus Session</button>
-  <script src="script.js"></script>
-
-  <br><br>
-
-  <br><br><br><br><br>
-  <h3>About</h3> 
-  <p size=3>
-    This plugin can start a "focus session" and will alert you when you are off task. Give the plugin the URL of the "focus topic" and using ML it will alert you when are off task. We hope this will help you! :)
-  </p>
+  <p>If you don't have an account please sign-up: <a href="signup.html"><button class="btn btn-primary">Sign Up</button></a> </p>
 
   <br>
 
