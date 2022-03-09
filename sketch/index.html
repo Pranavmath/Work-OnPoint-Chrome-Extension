@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
   <div id="poppingup" style = "min-width:600px;"></div>
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -35,7 +35,6 @@
   <button id="submit" class="btn btn-primary" style="height:30px;font-size:10pt;text-align:center;">Start Focus Session</button>
 
   <button id="end" class="btn btn-primary" style="height:30px;font-size:10pt;text-align:center;">End Focus Session</button>
-  <script src="script.js"></script>
 
   <br><br>
 
@@ -51,10 +50,12 @@
     <ul class="pagination pagination-sm justify-content-center">
       <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
       <li class="page-item active"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="leaderboard.html">2</a></li>
+      <li class="page-item"> <button id="next" type="submit"><a class="page-link" href="leaderboard.html">2</a></button> </li>
       <li class="page-item"><a class="page-link" href="leaderboard.html">Next</a></li>
     </ul>
   </nav>
+
+  <script src="script.js"></script>
 
   </body>
 </html>

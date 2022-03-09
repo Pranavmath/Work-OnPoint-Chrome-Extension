@@ -30,5 +30,21 @@ document.getElementById("refresh").addEventListener("click", refresh);
 function refresh() {
 	data = background.statistics();
 	document.getElementById("coin").innerHTML = data["coin"];
-
+	new Chart("graph", {
+      type: "bar",
+      data: {
+        labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        datasets: [{
+          backgroundColor: barColors,
+          data: data["week"]
+        }]
+      },
+      options: {
+        legend: {display: false},
+        title: {
+          display: true,
+          text: "Focus Time from last few weeks"
+        }
+      }
+    });
 }

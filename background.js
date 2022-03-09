@@ -1,6 +1,7 @@
 console.log('Chrome extension go!');
 var begin = 0;
 var continue_loop = true;
+var login = false;
 
 function statistics () {
     let data = {
@@ -9,6 +10,12 @@ function statistics () {
         "rank": ["Hi", "Yo", "Joe"]
     }
     return data;
+}
+
+function signup() {
+}
+
+function login() {
 }
 
 function sleep (time) {
