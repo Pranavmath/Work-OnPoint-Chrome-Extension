@@ -8,25 +8,10 @@
   <style>
   p {font-family: 'Nunito';font-size: 15px;}
   body {font-family: 'Nunito';font-size: 20px;}
+  label {font-family: 'Nunito';font-size: 15px;}
   </style>
 
-  <nav class="navbar navbar-dark bg-primary">
-    <!-- Navbar content -->
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <a class="navbar-brand" style="color:white;" href="index.html">Home</a>
-        </div>
-        <div class="col">
-          <a class="navbar-brand" style="color:white;" href="login.html">Login</a>
-        </div>
-        <div class="col">
-          <a class="navbar-brand" style="color:white;" href="signup.html">Sign Up</a>
-        </div>
-      </div>
-    </div>
-  </nav>
-
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
   <body>
 
@@ -40,17 +25,31 @@
 
   <br><br><br><br><br>
   <h3>About</h3> 
-  <p size=3>
+  <p>
     This plugin can start a "focus session" and will alert you when you are off task. Give the plugin the URL of the "focus topic" and using ML it will alert you when are off task. We hope this will help you! :)
   </p>
 
-  <br>
+  Grace Period Time:
+  <div class="form-check form-check-inline">
+    <input class="form-checsk-input" type="radio" name="inlineRadioOptions" id="input1" value=10 checked>
+    <label class="form-check-label" for="input1">10 seconds</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="input2" value=20>
+    <label class="form-check-label" for="input2">20 seconds</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="input3" value=30>
+    <label class="form-check-label" for="input3">30 seconds</label>
+  </div>
+
+  <br><br>
 
   <nav aria-label="Page navigation example">
     <ul class="pagination pagination-sm justify-content-center">
       <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
       <li class="page-item active"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"> <button id="next" type="submit"><a class="page-link" href="leaderboard.html">2</a></button> </li>
+      <li class="page-item"> <a class="page-link" href="leaderboard.html">2</a> </li>
       <li class="page-item"><a class="page-link" href="leaderboard.html">Next</a></li>
     </ul>
   </nav>

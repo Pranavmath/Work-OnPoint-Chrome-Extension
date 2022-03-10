@@ -1,21 +1,66 @@
 console.log('Chrome extension go!');
 var begin = 0;
 var continue_loop = true;
-var login = false;
+var coin = 0;
+var week_time = 0;
+var time = 0;
+var grace_period = 10;
+
+
+/*
+    chrome.storage.sync.get('week', function(items) {
+        var week = items.week;
+        if (week) {
+            let data = {
+                "week": [0, 0, 0, 0, 0, 0 ,0],
+                "coin": coin,
+            }
+            data["week"][curr.getDay()] = time;
+            return data;
+        } else {
+            var sus = [0, 0, 0, 0, 0, 0 ,0];
+            chrome.storage.sync.set({week: sus}, function() {
+                let data = {
+                    "week": [0, 0, 0, 0, 0, 0 ,0],
+                    "coin": coin,
+                }
+                data["week"][curr.getDay()] = time;
+                return data;
+            });
+        }
+    });
+*/
+
+/*
+    var curr = new Date; // get current date
+
+    let data = {
+        "week": [0, 0, 0, 0, 0, 0, 0],
+        "coin": coin,
+    }
+    data["week"][curr.getDay()] = time;
+    return data;
+*/
 
 function statistics () {
-    let data = {
-        "week": [2, 3, 4, 5, 6, 8, 10],
-        "coin": 9,
-        "rank": ["Hi", "Yo", "Joe"]
-    }
-    return data;
-}
+    var curr = new Date; // get current date
+    let data = {};
 
-function signup() {
-}
-
-function login() {
+    chrome.storage.sync.get('week', function(items) {
+        var week = items.week;
+        if (week) {
+            week_change = week;
+            week_change[curr.getDay()] = time;
+            chrome.storage.sync.set({week: week_change}, function() {
+                week_time = week;
+            });
+        } else {
+            var clean_week = [0, 0, 0, 0, 0, 0 ,0];
+            chrome.storage.sync.set({week: clean_week}, function() {
+                week_time = week;
+            });
+        }
+    });
 }
 
 function sleep (time) {
@@ -59,15 +104,54 @@ function off_topic(focus_topic, current_topic, current_time){
     fetchCosSimilarity(focus_topic, current_topic).then(cos_sim => {
         //console.log(cos_sim);
         if (cos_sim < 0.54){
-            if (current_time-begin > 0){
+            if (current_time-begin > grace_period * 1000){
                 //alert("You are off topic");
-                alert("You are off topic" + cos_sim);
+                if (time > 2 * 60 && time <  40 * 60) {
+                    alert("Starting to study might be tough but you got this");
+                } else {
+                    alert("You are off topic" + cos_sim);
+                }
             }
         } else {
             begin = current_time;
         }
     });
 }
+
+/*
+Run this code when REST API is on
+
+function off_topic(focus_topic, current_topic, current_time){
+    fetchCosSimilarity(focus_topic, current_topic).then(cos_sim => {
+        chrome.idle.queryState(
+            15,
+            function(state) {
+                if (state ==  "active") {
+                    time += 5;
+                    if (cos_sim < 0.54){
+                        if (current_time-begin > grace_period * 1000){
+                            if (time > 2 * 60 && time <  40 * 60) {
+                                alert("Starting to study might be tough but you got this");
+                            } else {
+                                chrome.tabs.executeScript({code: "var type_alert = 'alert';"}, function() {
+                                    chrome.tabs.executeScript({file: '/content.js'});
+                                });
+                            }
+                        }
+                    } else {
+                        coin += 1;
+                        begin = current_time;
+                    }
+                } else {
+                    chrome.tabs.executeScript({code: "var type_alert = 'snooze';"}, function() {
+                        chrome.tabs.executeScript({file: '/content.js'});
+                    });
+                }
+            }
+        );
+    });
+}
+*/
 
 function check(url, focus_topic, current_time) {
     /*
@@ -80,6 +164,8 @@ function check(url, focus_topic, current_time) {
       15,
       function(state) {
         if (state ==  "active") {
+            coin += 1;
+            time += 5;
             chrome.tabs.executeScript({code: "var type_alert = 'alert';"}, function() {
                 chrome.tabs.executeScript({file: '/content.js'});
             });
