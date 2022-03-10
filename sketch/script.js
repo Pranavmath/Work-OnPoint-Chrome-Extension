@@ -8,6 +8,30 @@ $('input:radio').on('change', function(e){
   background.grace_period = value;
 });
 
+/* Remmeber and keep current selected radio
+<input type=radio id=blah1 value=blah1 name=blah checked />
+<input type=radio id=blah2 value=blah2 name=blah />
+<input type=radio id=blah3 value=blah3 name=blah />
+
+$(function () {
+
+    $('input[type="radio"]').click(function () {
+        localStorage.setItem('radioIdSelected', $(this).attr('id'));
+    });
+
+    var storageRadio = localStorage.getItem('radioIdSelected');
+
+    if (storageRadio !== null && storageRadio !== undefined && $('#' + storageRadio).length) {
+        $('#' + storageRadio).trigger('click');
+    } else {
+        $('input[type="radio"]:first').trigger('click');
+    }
+
+});
+
+*/
+
+
 function url(){
     background.continue_loop = true;
     var x = document.getElementById("url").value;
