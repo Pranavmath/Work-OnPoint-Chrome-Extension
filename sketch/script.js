@@ -1,6 +1,9 @@
 var background = chrome.extension.getBackgroundPage(); //do this in global scope for popup.js
 
+document.getElementById("current_topic").innerText = background.cur;
+
 document.getElementById("submit").addEventListener("click", url);
+
 
 $('input:radio').on('change', function(e){
   var name = e.currentTarget.id;
@@ -35,6 +38,8 @@ $(function () {
 function url(){
     background.continue_loop = true;
     var x = document.getElementById("url").value;
+    background.cur = x;
+    document.getElementById("current_topic").innerText = x;
     console.log(x);
     let msg = {
         txt: x
@@ -45,5 +50,6 @@ function url(){
 document.getElementById("end").addEventListener("click", end);
 
 function end(){
+    background.cur = "";
     background.continue_loop = false;
 }

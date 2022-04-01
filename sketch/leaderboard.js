@@ -1,10 +1,10 @@
 var background = chrome.extension.getBackgroundPage(); //do this in global scope for popup.js
-
-background.statistics(); // initial data that will get updated when refreshed
 var coin = background.coin; // initial data that will get updated when refreshed
 var week = background.week_time; // initial data that will get updated when refreshed
 
-var barColors = ["red", "green","blue","orange","brown"];
+background.statistics(); // initial data that will get updated when refreshed
+
+var barColors = ["red", "green", "blue", "orange", "brown", "purple", "yellow"];
 
 
 document.getElementById("coin").innerHTML = coin;
@@ -12,17 +12,22 @@ document.getElementById("coin").innerHTML = coin;
 new Chart("graph", {
   type: "bar",
   data: {
-    labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     datasets: [{
+      label: "Total Time",
       backgroundColor: barColors,
-      data: week
+      data: week[0]
+    }, {
+      label: "Total Focus Time",
+      backgroundColor: barColors,
+      data: week[1]
     }]
   },
   options: {
     legend: {display: false},
     title: {
       display: true,
-      text: "Focus Time from last few weeks"
+      text: "Focus Time from last few weeks (in minutes)"
     }
   }
 });
@@ -40,17 +45,22 @@ function refresh() {
 	new Chart("graph", {
       type: "bar",
       data: {
-        labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         datasets: [{
+          label: "Total Time",
           backgroundColor: barColors,
-          data: week
+          data: week[0]
+        }, {
+          label: "Total Focus Time",
+          backgroundColor: barColors,
+          data: week[1]
         }]
       },
       options: {
         legend: {display: false},
         title: {
           display: true,
-          text: "Focus Time from last few weeks"
+          text: "Focus Time from last few weeks (in minutes)"
         }
       }
     });
