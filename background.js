@@ -5,8 +5,29 @@ var coin = 0;
 var week_time = 0;
 var total_time = 0;
 var focus_time = 0;
-var grace_period = 0;
+var grace_period = 5;
 var cur = "";
+
+
+
+/*
+chrome.storage.sync.get('userid', function(items) {
+        var userid = items.week;
+        if (userid) {
+        } else {
+            var form = new FormData();
+            form.append("userid", "None");
+            form.append("name", current_topic);
+            form.append("coins", 0);
+            const user = await fetch("https://192.168.1.18:5000/leaderboard", { method: "POST", body: form, mode: "no-cors" });
+            user = user.json;
+
+
+            chrome.storage.sync.set({week: w}, function() {
+            }
+        }
+}
+*/
 
 statistics();
 
@@ -46,6 +67,47 @@ statistics();
     return data;
 */
 
+async function get_leaderboard(id, name) {
+    var form = new FormData();
+    form.append("user_id", id);
+    form.append("name", name);
+    form.append("coins", coin);
+
+    const response = await fetch("https://192.168.1.18:5000/leaderboard", { method: "POST", body: form, mode: "no-cors" });
+
+    const leaderboard_id = await response.json();
+
+    return [leaderboard_id["userid"], leaderboard_id["leaderboard"]];
+}
+
+function leaderboard() {
+    chrome.storage.sync.get('idname', function(items) {
+        var name_id = items.idname;
+        if (name_id){
+            var id = name_id[0];
+            var name = name_id[1];
+            get_leaderboard(id, name).then(li => {
+                return li[1]
+            });
+        } else {
+            chrome.tabs.executeScript({code: "var type_alert = 'user';"}, function() {
+                chrome.tabs.executeScript({file: '/content.js'});
+                chrome.runtime.onMessage.addListener(
+                    function(request, sender, sendResponse) {
+                        var name = request.name;
+                        get_leaderboard("None", name).then(li => {
+                            alert(li[1]);
+                            chrome.storage.sync.set({idname: [li[0], name]}, function() {
+                                return li[1]
+                            });
+                        });
+                    }
+                );
+            });
+        }
+    });
+}
+
 function statistics () {
     var curr = new Date; // get current date
 
@@ -64,17 +126,17 @@ function statistics () {
                 w[0] = [Math.floor(total_time/60), 0, 0, 0, 0, 0, 0]
                 w[1] = [Math.floor(focus_time/60), 0, 0, 0, 0, 0, 0]
             } else {
-                w[0][curr.getDay()] = Math.floor(total_time/60);
-                w[1][curr.getDay()] = Math.floor(focus_time/60);
+                w[0][curr.getDay()] = Math.floor(total_time/10);
+                w[1][curr.getDay()] = Math.floor(focus_time/10);
             }
 
             chrome.storage.sync.set({week: w}, function() {
                 week_time = w;
             });
         } else {
-            var clean_week = [34, 22, 54, 76, 68, 11, 23];
-            chrome.storage.sync.set({week: [clean_week, [29, 18, 48, 72, 63, 10, 21]]}, function() {
-                week_time = [clean_week, [29, 18, 48, 72, 63, 10, 21]];
+            var clean_week = [12, 0, 24, 10, 0, 0, 0];
+            chrome.storage.sync.set({week: [clean_week, [10, 0, 19, 8, 0, 0, 0]]}, function() {
+                week_time = [clean_week, [10, 0, 19, 8, 0, 0, 0]];
             });
         }
     });
@@ -89,7 +151,7 @@ async function fetchCosSimilarity(focus_topic, current_topic){
     form.append("text1", focus_topic);
     form.append("text2", current_topic);
 
-    const response = await fetch("https://192.168.1.16:5000/similarity_texts", { method: "POST", body: form, mode: "no-cors" });
+    const response = await fetch("https://192.168.1.18:5000/similarity_texts", { method: "POST", body: form, mode: "no-cors" });
 
     response.ok;
     response.status;
@@ -105,7 +167,7 @@ async function get_title(url){
     var form = new FormData();
     form.append("url", url);
 
-    const response = await fetch("https://192.168.1.16:5000/get_title", { method: "POST", body: form, mode: "no-cors" });
+    const response = await fetch("https://192.168.1.18:5000/get_title", { method: "POST", body: form, mode: "no-cors" });
 
     response.ok;
     response.status;

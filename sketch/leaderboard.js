@@ -27,7 +27,7 @@ new Chart("graph", {
     legend: {display: false},
     title: {
       display: true,
-      text: "Focus Time from last few weeks (in minutes)"
+      text: "Focus Time from last few days (in minutes)"
     }
   }
 });
@@ -60,7 +60,7 @@ function refresh() {
         legend: {display: false},
         title: {
           display: true,
-          text: "Focus Time from last few weeks (in minutes)"
+          text: "Focus Time from last few days (in minutes)"
         }
       }
     });

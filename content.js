@@ -35,3 +35,12 @@ if (type_alert == "snooze"){
     });
 }
 
+if (type_alert == "user"){
+    swal({
+        title: "Enter your username",
+        content: "input"
+    })
+    .then((value) => {
+        chrome.runtime.sendMessage({name: value});
+    });
+}
