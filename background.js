@@ -7,66 +7,24 @@ var total_time = 0;
 var focus_time = 0;
 var grace_period = 5;
 var cur = "";
+var current_leaderboard = [];
 
-
-
-/*
-chrome.storage.sync.get('userid', function(items) {
-        var userid = items.week;
-        if (userid) {
-        } else {
-            var form = new FormData();
-            form.append("userid", "None");
-            form.append("name", current_topic);
-            form.append("coins", 0);
-            const user = await fetch("https://192.168.1.18:5000/leaderboard", { method: "POST", body: form, mode: "no-cors" });
-            user = user.json;
-
-
-            chrome.storage.sync.set({week: w}, function() {
-            }
-        }
-}
-*/
+// Initializes the current_leaderboard array by running this in the beginning of the program
+chrome.storage.sync.get('name_and_id', function(items) {
+    var name_id = items.name_and_id;
+    if (name_id){
+        var id = name_id[0];
+        var name = name_id[1];
+        get_leaderboard(id, name).then(id_and_leaderboard => {
+            current_leaderboard = id_and_leaderboard[1];
+        });
+    }
+});
 
 statistics();
 
 
-/*
-    chrome.storage.sync.get('week', function(items) {
-        var week = items.week;
-        if (week) {
-            let data = {
-                "week": [0, 0, 0, 0, 0, 0 ,0],
-                "coin": coin,
-            }
-            data["week"][curr.getDay()] = time;
-            return data;
-        } else {
-            var sus = [0, 0, 0, 0, 0, 0 ,0];
-            chrome.storage.sync.set({week: sus}, function() {
-                let data = {
-                    "week": [0, 0, 0, 0, 0, 0 ,0],
-                    "coin": coin,
-                }
-                data["week"][curr.getDay()] = time;
-                return data;
-            });
-        }
-    });
-*/
-
-/*
-    var curr = new Date; // get current date
-
-    let data = {
-        "week": [0, 0, 0, 0, 0, 0, 0],
-        "coin": coin,
-    }
-    data["week"][curr.getDay()] = time;
-    return data;
-*/
-
+// This uses the backend REST API to get the leaderboard
 async function get_leaderboard(id, name) {
     var form = new FormData();
     form.append("user_id", id);
@@ -75,30 +33,32 @@ async function get_leaderboard(id, name) {
 
     const response = await fetch("https://192.168.1.9:5000/leaderboard", { method: "POST", body: form, mode: "no-cors" });
 
-    const leaderboard_id = await response.json();
+    const leaderboard_and_id = await response.json();
 
-    return [leaderboard_id["userid"], leaderboard_id["leaderboard"]];
+    return [leaderboard_and_id["userid"], leaderboard_and_id["leaderboard"]];
 }
 
+// This returns the leaderboard of users that use the Chrome extension using the get_leaderboard function
+// If the name and id is already stored then get it and get the leaderboard
+// If not get the user's name from an alert and then store it and return the leaderboard
 function leaderboard() {
-    chrome.storage.sync.get('idname', function(items) {
-        var name_id = items.idname;
+    chrome.storage.sync.get('name_and_id', function(items) {
+        var name_id = items.name_and_id;
         if (name_id){
             var id = name_id[0];
             var name = name_id[1];
-            get_leaderboard(id, name).then(li => {
-                return li[1]
+            get_leaderboard(id, name).then(id_and_leaderboard => {
+                current_leaderboard = id_and_leaderboard[1];
             });
         } else {
             chrome.tabs.executeScript({code: "var type_alert = 'user';"}, function() {
-                chrome.tabs.executeScript({file: '/content.js'});
+                chrome.tabs.executeScript({file: '/injectalert.js'});
                 chrome.runtime.onMessage.addListener(
                     function(request, sender, sendResponse) {
                         var name = request.name;
-                        get_leaderboard("None", name).then(li => {
-                            alert(li[1]);
-                            chrome.storage.sync.set({idname: [li[0], name]}, function() {
-                                return li[1]
+                        get_leaderboard("None", name).then(id_and_leaderboard => {
+                            chrome.storage.sync.set({name_and_id: [id_and_leaderboard[0], name]}, function() {
+                                current_leaderboard = id_and_leaderboard[1];
                             });
                         });
                     }
@@ -108,6 +68,8 @@ function leaderboard() {
     });
 }
 
+// This updates the current statistics which is array: w[0]: total time array and w[1]: focus time array
+// It then stores it using chrome storage
 function statistics () {
     var curr = new Date; // get current date
 
@@ -142,10 +104,12 @@ function statistics () {
     });
 }
 
+// This function sleeps for a certain amount of milliseconds
 function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
+// This function gets the cossine similarity between 2 topics by calling the backend api
 async function fetchCosSimilarity(focus_topic, current_topic){
     var form = new FormData();
     form.append("text1", focus_topic);
@@ -163,6 +127,7 @@ async function fetchCosSimilarity(focus_topic, current_topic){
     return cos_sim["cos_sim"];
 }
 
+// This function returns the title of a webpage given the url
 async function get_title(url){
     var form = new FormData();
     form.append("url", url);
@@ -179,28 +144,9 @@ async function get_title(url){
     return title["title"];
 }
 
-/*
-function off_topic(focus_topic, current_topic, current_time){
-    fetchCosSimilarity(focus_topic, current_topic).then(cos_sim => {
-        //console.log(cos_sim);
-        if (cos_sim < 0.54){
-            if (current_time-begin > grace_period * 1000){
-                //alert("You are off topic");
-                if (time > 2 * 60 && time <  40 * 60) {
-                    alert("Starting to study might be tough but you got this");
-                } else {
-                    alert("You are off topic" + cos_sim);
-                }
-            }
-        } else {
-            begin = current_time;
-        }
-    });
-}
-*/
 
-// Run this code when REST API is on
-
+// The off_topic function gets the cosine similarity from the fetchCosSimilarity function
+// Then using the cosine similarity and current time it will alert the user in a specific way
 function off_topic(focus_topic, current_topic, current_time){
     fetchCosSimilarity(focus_topic, current_topic).then(cos_sim => {
         chrome.idle.queryState(
@@ -209,20 +155,20 @@ function off_topic(focus_topic, current_topic, current_time){
                 if (state ==  "active") {
                     total_time += 5;
                     if (cos_sim < 0.54){
-                        if (current_time-begin > grace_period * 1000){
+                        if (current_time-begin > grace_period * 1000) {
                             if (total_time > 0 && total_time < 147.688 && (total_time % 2 == 0) ) {
                                 chrome.tabs.executeScript({code: "var type_alert = 'begin';"}, function() {
-                                    chrome.tabs.executeScript({file: '/content.js'});
+                                    chrome.tabs.executeScript({file: '/injectalert.js'});
                                 });
                             }
                             else if (total_time > 147.688 && total_time <  1693.762 && total_time % 3 == 0) {
                                 chrome.tabs.executeScript({code: "var type_alert = 'middle';"}, function() {
-                                    chrome.tabs.executeScript({file: '/content.js'});
+                                    chrome.tabs.executeScript({file: '/injectalert.js'});
                                 });
                             }
                             else {
                                 chrome.tabs.executeScript({code: "var type_alert = 'alert';"}, function() {
-                                    chrome.tabs.executeScript({file: '/content.js'});
+                                    chrome.tabs.executeScript({file: '/injectalert.js'});
                                 });
                             }
                         }
@@ -233,7 +179,7 @@ function off_topic(focus_topic, current_topic, current_time){
                     }
                 } else {
                     chrome.tabs.executeScript({code: "var type_alert = 'snooze';"}, function() {
-                        chrome.tabs.executeScript({file: '/content.js'});
+                        chrome.tabs.executeScript({file: '/injectalert.js'});
                     });
                 }
             }
@@ -241,51 +187,41 @@ function off_topic(focus_topic, current_topic, current_time){
     });
 }
 
+// The check function gets the current topic from the get_title function using the url
+// It then passes the focus topic, current topic and current time to the off_topic function
 function check(url, focus_topic, current_time) {
     get_title(url).then(title => {
         var current_topic = title;
         off_topic(focus_topic, current_topic, current_time);
     });
-    /*
-    chrome.idle.queryState(
-      15,
-      function(state) {
-        if (state ==  "active") {
-            coin += 1;
-            time += 5;
-            chrome.tabs.executeScript({code: "var type_alert = 'alert';"}, function() {
-                chrome.tabs.executeScript({file: '/content.js'});
-            });
-        } else {
-            chrome.tabs.executeScript({code: "var type_alert = 'snooze';"}, function() {
-                chrome.tabs.executeScript({file: '/content.js'});
-            });
-        }
-      }
-    );
-    */
 }
 
+// The run function is called when the script.js sends a message to start the session
 chrome.runtime.onMessage.addListener(run); // listening for popup.js to message to start focus session
 
+// Gets focus topic and calls and sends the focus topic, current time, and url to check funciton
+// This is then repeated every 5000 milliseconds
 function run(message, sender, sendResponse) {
-    focus_topic = message.txt;
-    begin = Date.now();
+    if (message.sending_focus_topic == true) {
+        focus_topic = message.txt;
+        begin = Date.now();
 
-    function repeat() {
-        // I believe that currentWindow is better than lastFocusedWindow
-        chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-            let url = tabs[0].url;
-            var current_time = Date.now();
+        function repeat() {
+            // I believe that currentWindow is better than lastFocusedWindow
+            chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+                let url = tabs[0].url;
+                var current_time = Date.now();
 
-            check(url, focus_topic, current_time);
-        });
+                check(url, focus_topic, current_time);
+            });
 
-        sleep(5000).then(() => {
-            if (continue_loop){
-                repeat();
-            }
-        });
+            sleep(5000).then(() => {
+                if (continue_loop) {
+                    repeat();
+                }
+            });
+        }
+
+        repeat();
     }
-    repeat();
 }

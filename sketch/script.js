@@ -1,52 +1,36 @@
-var background = chrome.extension.getBackgroundPage(); //do this in global scope for popup.js
+var background = chrome.extension.getBackgroundPage(); //do this in global scope for script.js
 
+
+// Initializes the current topic and on submit of the current topic button call the url function
 document.getElementById("current_topic").innerText = background.cur;
-
 document.getElementById("submit").addEventListener("click", url);
 
 
+// When the radio is changed in changes the variable in the background
 $('input:radio').on('change', function(e){
   var name = e.currentTarget.id;
   var value = e.currentTarget.value;
   background.grace_period = value;
 });
 
-/* Remmeber and keep current selected radio
-<input type=radio id=blah1 value=blah1 name=blah checked />
-<input type=radio id=blah2 value=blah2 name=blah />
-<input type=radio id=blah3 value=blah3 name=blah />
 
-$(function () {
-
-    $('input[type="radio"]').click(function () {
-        localStorage.setItem('radioIdSelected', $(this).attr('id'));
-    });
-
-    var storageRadio = localStorage.getItem('radioIdSelected');
-
-    if (storageRadio !== null && storageRadio !== undefined && $('#' + storageRadio).length) {
-        $('#' + storageRadio).trigger('click');
-    } else {
-        $('input[type="radio"]:first').trigger('click');
-    }
-
-});
-
-*/
-
-
+// When it is called it updates the current_topic in index.html
+// It also calls the run function to start the session in the background.js
 function url(){
     background.continue_loop = true;
-    var x = document.getElementById("url").value;
-    background.cur = x;
-    document.getElementById("current_topic").innerText = x;
-    console.log(x);
+    var topic = document.getElementById("topic").value;
+    background.cur = topic;
+    document.getElementById("current_topic").innerText = topic;
+    console.log(topic);
     let msg = {
-        txt: x
+        sending_focus_topic: true,
+        txt: topic
     };
+
     chrome.runtime.sendMessage(msg);
 }
 
+// When the end button is clicked tell background.js to stop the session and update current_topic
 document.getElementById("end").addEventListener("click", end);
 
 function end(){

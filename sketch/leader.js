@@ -1,6 +1,11 @@
-var background = chrome.extension.getBackgroundPage(); //do this in global scope for popup.js
-var l = background.leaderboard();
+var background = chrome.extension.getBackgroundPage(); //do this in global scope for leader.js
+var l = [];
 
+// Gets the leaderboard and updates the leaderboard html
+background.leaderboard();
+l = background.current_leaderboard;
+
+console.log(l);
 
 document.getElementById("user1").innerHTML = l[0][0];
 document.getElementById("coin1").innerHTML = l[0][1];
