@@ -96,9 +96,9 @@ function statistics () {
                 week_time = w;
             });
         } else {
-            var clean_week = [12, 0, 24, 10, 0, 0, 0];
-            chrome.storage.sync.set({week: [clean_week, [10, 0, 19, 8, 0, 0, 0]]}, function() {
-                week_time = [clean_week, [10, 0, 19, 8, 0, 0, 0]];
+            var clean_week = [42, 12, 24, 10, 21, 44, 0];
+            chrome.storage.sync.set({week: [clean_week, [30, 5, 19, 8, 11, 34, 0]]}, function() {
+                week_time = [clean_week, [30, 5, 19, 8, 11, 34, 0]];
             });
         }
     });
