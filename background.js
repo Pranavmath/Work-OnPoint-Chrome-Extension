@@ -73,7 +73,7 @@ async function get_leaderboard(id, name) {
     form.append("name", name);
     form.append("coins", coin);
 
-    const response = await fetch("https://192.168.1.18:5000/leaderboard", { method: "POST", body: form, mode: "no-cors" });
+    const response = await fetch("https://192.168.1.9:5000/leaderboard", { method: "POST", body: form, mode: "no-cors" });
 
     const leaderboard_id = await response.json();
 
@@ -123,8 +123,8 @@ function statistics () {
             }
 
             if (curr.getDay() == 0) {
-                w[0] = [Math.floor(total_time/60), 0, 0, 0, 0, 0, 0]
-                w[1] = [Math.floor(focus_time/60), 0, 0, 0, 0, 0, 0]
+                w[0] = [Math.floor(total_time/10), 0, 0, 0, 0, 0, 0]
+                w[1] = [Math.floor(focus_time/10), 0, 0, 0, 0, 0, 0]
             } else {
                 w[0][curr.getDay()] = Math.floor(total_time/10);
                 w[1][curr.getDay()] = Math.floor(focus_time/10);
@@ -151,7 +151,7 @@ async function fetchCosSimilarity(focus_topic, current_topic){
     form.append("text1", focus_topic);
     form.append("text2", current_topic);
 
-    const response = await fetch("https://192.168.1.18:5000/similarity_texts", { method: "POST", body: form, mode: "no-cors" });
+    const response = await fetch("https://192.168.1.9:5000/similarity_texts", { method: "POST", body: form, mode: "no-cors" });
 
     response.ok;
     response.status;
@@ -167,7 +167,7 @@ async function get_title(url){
     var form = new FormData();
     form.append("url", url);
 
-    const response = await fetch("https://192.168.1.18:5000/get_title", { method: "POST", body: form, mode: "no-cors" });
+    const response = await fetch("https://192.168.1.9:5000/get_title", { method: "POST", body: form, mode: "no-cors" });
 
     response.ok;
     response.status;
