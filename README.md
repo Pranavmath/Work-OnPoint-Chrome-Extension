@@ -10,4 +10,5 @@ Features: Alerts when off-task, gamification using coins + leaderboard, and seei
 
 This is the code for the chrome extension. For the code of the server please look here: https://github.com/Pranavmath/REST-Api-Extension
 
-[Bootstrap](https://getbootstrap.com/) and [jQuery](https://jquery.com/) were used during the development of the UI.
+[Bootstrap](https://getbootstrap.com/), [jQuery](https://jquery.com/), [Chart.js](https://www.chartjs.org/), and [FontAwesome](https://fontawesome.com/) were used during the development of the UI.
+
